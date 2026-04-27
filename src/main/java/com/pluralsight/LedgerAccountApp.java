@@ -1,12 +1,10 @@
 package com.pluralsight;
 
-import javax.swing.tree.TreeCellRenderer;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -15,7 +13,6 @@ import java.util.Scanner;
 public class LedgerAccountApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        //Remove the hashmap from Deposit
         boolean userInHomescreen = true;
         boolean userInLedger = true;
         String homeScreenOption = "";
@@ -24,7 +21,7 @@ public class LedgerAccountApp {
         HashMap<String, Transaction> depositTransactionHashMap = new HashMap<>();
         HashMap<String, Transaction> paymentTransactionHashMap = new HashMap<>();
 
-        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("hh:mm:ss"));
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         /*Transaction obj = new Transaction();
@@ -67,7 +64,7 @@ public class LedgerAccountApp {
                             }
                         }
 
-                        LocalTime userCurrentTime = LocalTime.now().withSecond(2).withNano(0);
+                        LocalTime userCurrentTime = LocalTime.now().withNano(0);
                         LocalDate userCurrentDate = LocalDate.now();
 
                         String parsedTime = userCurrentTime.format(timeFormat);
@@ -133,6 +130,54 @@ public class LedgerAccountApp {
                 }
                 case ("l") -> {
                     while (userInLedger) {
+                        try {
+                            BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
+                            String line;
+
+                            bufferedReader.readLine();
+
+                            while((line = bufferedReader.readLine()) != null) {
+
+                                    String[] tempArray = line.split("\\|");
+
+                                    Transaction transaction = new Transaction();
+
+                                    try {
+                                        LocalDate transactionDate = LocalDate.parse(tempArray[0]);
+                                        LocalTime transactionTime = (LocalTime.parse(tempArray[1]));
+                                        String transactionDescription = tempArray[2];
+                                        String vendor = tempArray[3];
+                                        double amount = Double.valueOf(tempArray[4]);
+
+                                        transaction.setTransactionDate(transactionDate);
+                                        transaction.setTransactionTime(transactionTime);
+                                        transaction.setTransactionDescription(transactionDescription);
+                                        transaction.setVendor(vendor);
+                                        transaction.setPrice(amount);
+
+                                        String key = transaction.getTransactionDate() + "|" + transaction.getTransactionTime().format(timeFormat);
+                                        if (amount < 0) {
+                                            depositTransactionHashMap.put(key, transaction);
+                                            System.out.println(depositTransactionHashMap.get(key));
+                                        }
+                                        else {
+                                            paymentTransactionHashMap.put(key, transaction);
+                                            System.out.println(paymentTransactionHashMap.get(key).getPrice());
+                                        }
+
+
+                                    }
+                                    catch (NumberFormatException | DateTimeParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                            }
+
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         System.out.println("(A) Display all entries\n(D) Display all entries that are deposits\n(P) Display negative entries\n(R) Run pre-defined reports\n(H) Go back to homepage");
                         System.out.print("Type your selection here: ");
                         userSelection = sc.nextLine().trim().toLowerCase();
