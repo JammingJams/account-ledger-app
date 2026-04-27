@@ -69,7 +69,7 @@ public class LedgerAccountApp {
 
                         String price = String.valueOf(notParsedPrice);
 
-                        String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|-" + price;
+                        String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|" + price;
                         bufferedWriter.write(depositTransaction);
                         bufferedWriter.newLine();
                         bufferedWriter.close();
@@ -113,7 +113,7 @@ public class LedgerAccountApp {
 
                         String price = String.valueOf(notParsedPrice);
 
-                        String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|" + price;
+                        String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|-" + price;
                         bufferedWriter.write(depositTransaction);
                         bufferedWriter.newLine();
                         bufferedWriter.close();
@@ -126,6 +126,10 @@ public class LedgerAccountApp {
                 }
                 case ("l") -> {
                     while (userInLedger) {
+
+                        depositTransactionList.clear();
+                        paymentTransactionList.clear();
+
                         try {
                             BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
                             String line;
@@ -170,7 +174,7 @@ public class LedgerAccountApp {
                         catch (IOException e) {
                             e.printStackTrace();
                         }
-                        System.out.println("(A) Display all entries\n(D) Display all entries that are deposits\n(P) Display negative entries\n(R) Run pre-defined reports\n(H) Go back to homepage");
+                        System.out.println("(A) Display all entries\n(D) Display all entries that are deposits\n(P) Display payment entries\n(R) Run pre-defined reports\n(H) Go back to homepage");
                         System.out.print("Type your selection here: ");
                         userSelection = sc.nextLine().trim().toLowerCase();
 
@@ -178,26 +182,24 @@ public class LedgerAccountApp {
                             case ("a") -> {
                                 System.out.println("Deposits!");
                                 for(Transaction i : depositTransactionList) {
-                                    String formattedDate = i.getTransactionDate().format(dateFormat);
-                                    String formattedTime = i.getTransactionTime().format(timeFormat);
-                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",formattedDate,formattedTime,i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
                                 }
                                 System.out.println("Payments!");
                                 for(Transaction i : paymentTransactionList) {
-                                    String formattedDate = i.getTransactionDate().format(dateFormat);
-                                    String formattedTime = i.getTransactionTime().format(timeFormat);
-                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",formattedDate,formattedTime,i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
                                 }
                                 System.out.println("\n\n\n");
                             }
                             case ("d") -> {
                                 for(Transaction i : depositTransactionList) {
-                                    String formattedDate = i.getTransactionDate().format(dateFormat);
-                                    String formattedTime = i.getTransactionTime().format(timeFormat);
-                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",formattedDate,formattedTime,i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
                                 }
                             }
-                            case ("p") -> {}
+                            case ("p") -> {
+                                for(Transaction i : paymentTransactionList) {
+                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                }
+                            }
                             case ("r") -> {}
                             case ("h") -> {userInLedger = false;}
                             default -> {System.out.println("Invalid user input");}
