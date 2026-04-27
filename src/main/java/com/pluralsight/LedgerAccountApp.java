@@ -2,10 +2,8 @@ package com.pluralsight;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class LedgerAccountApp {
@@ -155,11 +153,9 @@ public class LedgerAccountApp {
 
                                         if (amount < 0) {
                                             depositTransactionList.add(transaction);
-                                            System.out.println(depositTransactionList.get(0).getPrice());
                                         }
                                         else {
                                             paymentTransactionList.add(transaction);
-                                            System.out.println(paymentTransactionList.get(0).getPrice());
                                         }
 
                                     }
@@ -179,8 +175,28 @@ public class LedgerAccountApp {
                         userSelection = sc.nextLine().trim().toLowerCase();
 
                         switch (userSelection) {
-                            case ("a") -> {}
-                            case ("d") -> {}
+                            case ("a") -> {
+                                System.out.println("Deposits!");
+                                for(Transaction i : depositTransactionList) {
+                                    String formattedDate = i.getTransactionDate().format(dateFormat);
+                                    String formattedTime = i.getTransactionTime().format(timeFormat);
+                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",formattedDate,formattedTime,i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                }
+                                System.out.println("Payments!");
+                                for(Transaction i : paymentTransactionList) {
+                                    String formattedDate = i.getTransactionDate().format(dateFormat);
+                                    String formattedTime = i.getTransactionTime().format(timeFormat);
+                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",formattedDate,formattedTime,i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                }
+                                System.out.println("\n\n\n");
+                            }
+                            case ("d") -> {
+                                for(Transaction i : depositTransactionList) {
+                                    String formattedDate = i.getTransactionDate().format(dateFormat);
+                                    String formattedTime = i.getTransactionTime().format(timeFormat);
+                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",formattedDate,formattedTime,i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                }
+                            }
                             case ("p") -> {}
                             case ("r") -> {}
                             case ("h") -> {userInLedger = false;}
