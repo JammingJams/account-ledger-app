@@ -6,10 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class LedgerAccountApp {
     public static void main(String[] args) {
@@ -19,8 +16,8 @@ public class LedgerAccountApp {
         String homeScreenOption = "";
         String userSelection = "";
         double priceSelection = 0;
-        HashMap<LocalDateTime, Transaction> depositTransactionHashMap = new HashMap<>();
-        HashMap<LocalDateTime, Transaction> paymentTransactionHashMap = new HashMap<>();
+        ArrayList<Transaction> depositTransactionList = new ArrayList<>();
+        ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
 
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -156,14 +153,13 @@ public class LedgerAccountApp {
                                         transaction.setVendor(vendor);
                                         transaction.setPrice(amount);
 
-                                        LocalDateTime key = LocalDateTime.of(transactionDate, transactionTime);
                                         if (amount < 0) {
-                                            depositTransactionHashMap.put(key, transaction);
-                                            System.out.println(depositTransactionHashMap.get(key));
+                                            depositTransactionList.add(transaction);
+                                            System.out.println(depositTransactionList.get(1));
                                         }
                                         else {
-                                            paymentTransactionHashMap.put(key, transaction);
-                                            System.out.println(paymentTransactionHashMap.get(key).getPrice());
+                                            paymentTransactionList.add(transaction);
+                                            System.out.println(paymentTransactionList.get(1).getPrice());
                                         }
 
 //
