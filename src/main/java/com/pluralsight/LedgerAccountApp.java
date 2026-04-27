@@ -15,6 +15,7 @@ import java.util.Scanner;
 public class LedgerAccountApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        //Remove the hashmap from Deposit
         boolean userInHomescreen = true;
         boolean userInLedger = true;
         String homeScreenOption = "";
@@ -32,12 +33,10 @@ public class LedgerAccountApp {
 
 
 
-        System.out.println("Welcome to the account ledger");
-        System.out.println("(D) Add deposit\n(P) Make Payment (Debit)\n(L) Ledger\n(X) exit");
-
-
 
         while (userInHomescreen) {
+            System.out.println("Welcome to the account ledger");
+            System.out.println("(D) Add deposit\n(P) Make Payment (Debit)\n(L) Ledger\n(X) exit");
             userInLedger = true;
             userSelection = "";
             homeScreenOption = sc.nextLine().trim().toLowerCase();
@@ -47,29 +46,18 @@ public class LedgerAccountApp {
                 case ("d") -> {
                     try {
                         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv",true));
-                        Transaction depositTransaction = new Transaction();
-                        LocalTime userCurrentTime = LocalTime.now().withSecond(2).withNano(0);
-                        LocalDate userCurrentDate = LocalDate.now();
+                        double tempPrice = 0;
+                        double notParsedPrice = 0;
 
-                        String parsedTime = userCurrentTime.format(timeFormat);
-                        String parsedDate = userCurrentDate.format(dateFormat);
-                        String dateAndTime = parsedDate + "|" + parsedTime;
-
-
-                        //This area sets the new objects datatypes
-                        depositTransaction.setTransactionDate(userCurrentDate);
-                        depositTransaction.setTransactionTime(userCurrentTime);
-                        System.out.print("Put in what you are paying for: ");
-                        depositTransaction.setTransactionDescription(userSelection = sc.nextLine().trim());
-                        System.out.print("Put in what who you are buying from: ");
-                        depositTransaction.setVendor(userSelection = sc.nextLine().trim());
-                        System.out.print("How much does this product cost?: ");
-
-                        //this catches any user misinputs
+                        System.out.print("What product are you buying?: ");
+                        String transactionDescription = sc.nextLine().trim();
+                        System.out.print("What is the product's vendor?: ");
+                        String vendor = sc.nextLine().trim();
+                        System.out.print("What is the amount of money your paying?: " );
                         while (true) {
                             try {
-                                priceSelection = sc.nextDouble();
-                                depositTransaction.setPrice(priceSelection = Math.round(priceSelection * 100.0) / 100.0);
+                                tempPrice = sc.nextDouble();
+                                notParsedPrice = Math.round(tempPrice * 100.0) / 100.0;
                                 sc.nextLine();
                                 break;
                             } catch (InputMismatchException e) {
@@ -78,22 +66,71 @@ public class LedgerAccountApp {
                                 sc.nextLine();
                             }
                         }
-                        //This hashmap is no longer needed
-                        depositTransactionHashMap.put(dateAndTime, depositTransaction);
 
-                        String forLog = String.valueOf(depositTransaction.getPrice());
-                        String depositLog = dateAndTime + "|" + depositTransaction.getTransactionDescription() + "|" + depositTransaction.getVendor() + "|" + forLog;
-                        bufferedWriter.write(depositLog);
+                        LocalTime userCurrentTime = LocalTime.now().withSecond(2).withNano(0);
+                        LocalDate userCurrentDate = LocalDate.now();
+
+                        String parsedTime = userCurrentTime.format(timeFormat);
+                        String parsedDate = userCurrentDate.format(dateFormat);
+                        String dateAndTime = parsedDate + "|" + parsedTime;
+
+                        String price = String.valueOf(notParsedPrice);
+
+                        String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|-" + price;
+                        bufferedWriter.write(depositTransaction);
                         bufferedWriter.newLine();
                         bufferedWriter.close();
-
+                        System.out.println("\n\n\n");
                     }
                     catch (IOException e) {
                         e.printStackTrace();
                     }
 
                 }
-                case ("p") -> {}
+                case ("p") -> {
+                    try {
+                        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv",true));
+                        double tempPrice = 0;
+                        double notParsedPrice = 0;
+
+                        System.out.print("Why are you receiving money?: ");
+                        String transactionDescription = sc.nextLine().trim();
+                        System.out.print("Who is giving you the money?: ");
+                        String vendor = sc.nextLine().trim();
+                        System.out.print("What is the amount of money your receiving?: " );
+                        while (true) {
+                            try {
+                                tempPrice = sc.nextDouble();
+                                notParsedPrice = Math.round(tempPrice * 100.0) / 100.0;
+                                sc.nextLine();
+                                break;
+                            } catch (InputMismatchException e) {
+                                //e.printStackTrace();
+                                System.out.print("Hey please input a valid number not a string!: ");
+                                sc.nextLine();
+                            }
+                        }
+
+                        LocalTime userCurrentTime = LocalTime.now().withSecond(2).withNano(0);
+                        LocalDate userCurrentDate = LocalDate.now();
+
+                        String parsedTime = userCurrentTime.format(timeFormat);
+                        String parsedDate = userCurrentDate.format(dateFormat);
+                        String dateAndTime = parsedDate + "|" + parsedTime;
+
+                        String price = String.valueOf(notParsedPrice);
+
+                        String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|" + price;
+                        bufferedWriter.write(depositTransaction);
+                        bufferedWriter.newLine();
+                        bufferedWriter.close();
+                        System.out.println("\n\n\n");
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
                 case ("l") -> {
                     while (userInLedger) {
                         System.out.println("(A) Display all entries\n(D) Display all entries that are deposits\n(P) Display negative entries\n(R) Run pre-defined reports\n(H) Go back to homepage");
