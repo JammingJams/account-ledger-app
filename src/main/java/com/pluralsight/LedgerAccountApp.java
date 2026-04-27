@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -18,8 +19,8 @@ public class LedgerAccountApp {
         String homeScreenOption = "";
         String userSelection = "";
         double priceSelection = 0;
-        HashMap<String, Transaction> depositTransactionHashMap = new HashMap<>();
-        HashMap<String, Transaction> paymentTransactionHashMap = new HashMap<>();
+        HashMap<LocalDateTime, Transaction> depositTransactionHashMap = new HashMap<>();
+        HashMap<LocalDateTime, Transaction> paymentTransactionHashMap = new HashMap<>();
 
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -155,7 +156,7 @@ public class LedgerAccountApp {
                                         transaction.setVendor(vendor);
                                         transaction.setPrice(amount);
 
-                                        String key = transaction.getTransactionDate() + "|" + transaction.getTransactionTime().format(timeFormat);
+                                        LocalDateTime key = LocalDateTime.of(transactionDate, transactionTime);
                                         if (amount < 0) {
                                             depositTransactionHashMap.put(key, transaction);
                                             System.out.println(depositTransactionHashMap.get(key));
