@@ -51,30 +51,41 @@ public class LedgerAccountApp {
                         LocalTime userCurrentTime = LocalTime.now().withSecond(2).withNano(0);
                         LocalDate userCurrentDate = LocalDate.now();
 
+                        String parsedTime = userCurrentTime.format(timeFormat);
+                        String parsedDate = userCurrentDate.format(dateFormat);
+                        String dateAndTime = parsedDate + "|" + parsedTime;
+
+
                         //This area sets the new objects datatypes
                         depositTransaction.setTransactionDate(userCurrentDate);
                         depositTransaction.setTransactionTime(userCurrentTime);
                         System.out.print("Put in what you are paying for: ");
-                        depositTransaction.setTransactionDescription(userSelection = sc.nextLine());
-                        System.out.println("Put in what who you are buying from: ");
-                        depositTransaction.setTransactionDescription(userSelection = sc.nextLine());
+                        depositTransaction.setTransactionDescription(userSelection = sc.nextLine().trim());
+                        System.out.print("Put in what who you are buying from: ");
+                        depositTransaction.setVendor(userSelection = sc.nextLine().trim());
+                        System.out.print("How much does this product cost?: ");
 
                         //this catches any user misinputs
                         while (true) {
                             try {
-                                depositTransaction.setPrice(priceSelection = sc.nextDouble());
+                                priceSelection = sc.nextDouble();
+                                depositTransaction.setPrice(priceSelection = Math.round(priceSelection * 100.0) / 100.0);
                                 sc.nextLine();
                                 break;
                             } catch (InputMismatchException e) {
                                 //e.printStackTrace();
-                                System.out.println("Hey please input a valid number not a string!: ");
+                                System.out.print("Hey please input a valid number not a string!: ");
                                 sc.nextLine();
-                                priceSelection = sc.nextDouble();
                             }
                         }
+                        //This hashmap is no longer needed
+                        depositTransactionHashMap.put(dateAndTime, depositTransaction);
 
-
-
+                        String forLog = String.valueOf(depositTransaction.getPrice());
+                        String depositLog = dateAndTime + "|" + depositTransaction.getTransactionDescription() + "|" + depositTransaction.getVendor() + "|" + forLog;
+                        bufferedWriter.write(depositLog);
+                        bufferedWriter.newLine();
+                        bufferedWriter.close();
 
                     }
                     catch (IOException e) {
