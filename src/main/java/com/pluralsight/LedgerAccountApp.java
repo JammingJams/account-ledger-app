@@ -155,16 +155,15 @@ public class LedgerAccountApp {
 
                                         if (amount < 0) {
                                             depositTransactionList.add(transaction);
-                                            System.out.println(depositTransactionList.get(1));
+                                            System.out.println(depositTransactionList.get(0).getPrice());
                                         }
                                         else {
                                             paymentTransactionList.add(transaction);
-                                            System.out.println(paymentTransactionList.get(1).getPrice());
+                                            System.out.println(paymentTransactionList.get(0).getPrice());
                                         }
 
-//
                                     }
-                                    catch (NumberFormatException | DateTimeParseException e) {
+                                    catch (NumberFormatException e) {
                                         e.printStackTrace();
                                     }
 
