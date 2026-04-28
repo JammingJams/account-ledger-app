@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -42,11 +43,9 @@ public class DepositsPaymentsWriter {
             LocalTime userCurrentTime = LocalTime.now().withSecond(2).withNano(0);
             LocalDate userCurrentDate = LocalDate.now();
 
-            dateTimePref(sc, userInLoop, userSelection, userCurrentDate, userCurrentTime);
+            String dateAndTime = "";
 
-            String parsedTime = userCurrentTime.format(timeFormat);
-            String parsedDate = userCurrentDate.format(dateFormat);
-            String dateAndTime = parsedDate + "|" + parsedTime;
+            dateAndTime = dateTimePref(sc, userInLoop, userSelection, userCurrentDate, userCurrentTime, dateAndTime);
 
             String price = String.valueOf(notParsedPrice);
 
@@ -93,11 +92,9 @@ public class DepositsPaymentsWriter {
             LocalTime userCurrentTime = LocalTime.now().withNano(0);
             LocalDate userCurrentDate = LocalDate.now();
 
-            dateTimePref(sc, userInLoop, userSelection, userCurrentDate, userCurrentTime);
+            String dateAndTime = "";
 
-            String parsedTime = userCurrentTime.format(timeFormat);
-            String parsedDate = userCurrentDate.format(dateFormat);
-            String dateAndTime = parsedDate + "|" + parsedTime;
+            dateAndTime = dateTimePref(sc, userInLoop, userSelection, userCurrentDate, userCurrentTime, dateAndTime);
 
             String price = String.valueOf(notParsedPrice);
 
@@ -114,9 +111,9 @@ public class DepositsPaymentsWriter {
     }
 
 
-    public static void dateTimePref(Scanner sc, boolean userInLoop, String userSelection, LocalDate userCurrentDate, LocalTime userCurrentTime) {
+    public static String dateTimePref(Scanner sc, boolean userInLoop, String userSelection, LocalDate userCurrentDate, LocalTime userCurrentTime, String dateAndTime) {
         System.out.print("Type (A) to automatically assign date and time to current date\nType (M) for manually assigning date and time\nType here: ");
-        while (userInLoop) {
+        while (true) {
             userSelection = sc.nextLine().trim().toLowerCase();
             switch (userSelection) {
                 case ("m") -> {
@@ -147,15 +144,18 @@ public class DepositsPaymentsWriter {
                             System.out.print("Type in the time with this (HH:mm:ss) correct format: ");
                         }
                     }
+                    return userCurrentDate.toString() + "|" + userCurrentTime.toString();
                 }
                 case ("a") -> {
                     userCurrentTime = LocalTime.now().withNano(0);
                     userCurrentDate = LocalDate.now();
                     userInLoop = false;
+                    return userCurrentDate.toString() + "|" + userCurrentTime.toString();
                 }
                 default -> System.out.print("Invalid user input,\nType (A) automatically assigns date and time to current date\nType (M) for manually assigning date and time\nType here: ");
             }
 
         }
+
     }
 }

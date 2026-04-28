@@ -1,8 +1,8 @@
 package com.pluralsight;
 
+
 import java.util.ArrayList;
 import java.util.Scanner;
-//
 
 
 public class LedgerAccountApp {
@@ -15,7 +15,6 @@ public class LedgerAccountApp {
         boolean initialLedger;
         ArrayList<Transaction> depositTransactionList = new ArrayList<>();
         ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
-
 
 
         while (userInHomescreen) {

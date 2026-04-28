@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
@@ -137,7 +138,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
 
                 }
 
-            } catch (IOException e) {
+            } catch (IOException | DateTimeParseException e) {
                 e.printStackTrace();
             }
             //We would compare dates and allow user to input dates as well
