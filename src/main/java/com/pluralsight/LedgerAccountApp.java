@@ -231,17 +231,62 @@ public class LedgerAccountApp {
                                             }
                                         }
                                         case ("2") -> {
+                                            LocalDate dateNow = LocalDate.now().minusMonths(1);
+                                            String parsedDateNow = dateNow.format(monthFormat);
+                                            for(Transaction i : depositTransactionList) {
+                                                String parsedDepositDate = i.getTransactionDate().format(monthFormat);
 
+                                                if (parsedDateNow.equals(parsedDepositDate)) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
+                                            for(Transaction i : paymentTransactionList) {
+                                                String parsedPaymentDate = i.getTransactionDate().format(monthFormat);
+                                                if (parsedDateNow.equals(parsedPaymentDate)) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
                                         }
                                         case ("3") -> {
+                                            LocalDate dateNow = LocalDate.now();
+                                            String parsedDateNow = dateNow.format(yearFormat);
+                                            for(Transaction i : depositTransactionList) {
+                                                String parsedDepositDate = i.getTransactionDate().format(yearFormat);
+
+                                                if (parsedDateNow.equals(parsedDepositDate)) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
+                                            for(Transaction i : paymentTransactionList) {
+                                                String parsedPaymentDate = i.getTransactionDate().format(yearFormat);
+                                                if (parsedDateNow.equals(parsedPaymentDate)) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
 
                                         }
                                         case ("4") -> {
+                                            LocalDate dateNow = LocalDate.now().minusYears(1);
+                                            String parsedDateNow = dateNow.format(yearFormat);
+                                            for(Transaction i : depositTransactionList) {
+                                                String parsedDepositDate = i.getTransactionDate().format(yearFormat);
+
+                                                if (parsedDateNow.equals(parsedDepositDate)) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
+                                            for(Transaction i : paymentTransactionList) {
+                                                String parsedPaymentDate = i.getTransactionDate().format(yearFormat);
+                                                if (parsedDateNow.equals(parsedPaymentDate)) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
 
                                         }
                                         case ("5") -> {
 
                                         }
+                                        case ("0") -> {reportLoop = false;}
                                         default -> {System.out.println("Invalid user input");}
 
                                     }
