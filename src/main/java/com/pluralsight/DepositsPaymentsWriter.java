@@ -10,8 +10,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DepositsPaymentsWriter {
-    public static void writePayment() {
-        Scanner sc = new Scanner(System.in);
+    public static void writePayment(Scanner sc) {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -58,9 +57,8 @@ public class DepositsPaymentsWriter {
         }
     }
 
-    public static void writeDeposit() {
+    public static void writeDeposit(Scanner sc) {
         try {
-            Scanner sc = new Scanner(System.in);
             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -104,6 +102,7 @@ public class DepositsPaymentsWriter {
         catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 }
