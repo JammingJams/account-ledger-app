@@ -284,7 +284,19 @@ public class LedgerAccountApp {
 
                                         }
                                         case ("5") -> {
+                                            System.out.println("Select the vendor you want to display: ");
+                                            userSelection = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
+                                            for(Transaction i : depositTransactionList) {
 
+                                                if (userSelection.equals(i.getVendor().trim().toLowerCase().replaceAll("\\s+",""))) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
+                                            for(Transaction i : paymentTransactionList) {
+                                                if (userSelection.equals(i.getVendor().trim().toLowerCase().replaceAll("\\s+",""))) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
                                         }
                                         case ("0") -> {reportLoop = false;}
                                         default -> {System.out.println("Invalid user input");}
