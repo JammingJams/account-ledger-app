@@ -45,72 +45,22 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                             case ("1") -> {
                                 LocalDate dateNow = LocalDate.now();
                                 String parsedDateNow = dateNow.format(monthFormat);
-                                for(Transaction i : depositTransactionList) {
-                                    String parsedDepositDate = i.getTransactionDate().format(monthFormat);
-
-                                    if (parsedDateNow.equals(parsedDepositDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
-                                for(Transaction i : paymentTransactionList) {
-                                    String parsedPaymentDate = i.getTransactionDate().format(monthFormat);
-                                    if (parsedDateNow.equals(parsedPaymentDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
+                                monthComparison(depositTransactionList, paymentTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow);
                             }
                             case ("2") -> {
                                 LocalDate dateNow = LocalDate.now().minusMonths(1);
                                 String parsedDateNow = dateNow.format(monthFormat);
-                                for(Transaction i : depositTransactionList) {
-                                    String parsedDepositDate = i.getTransactionDate().format(monthFormat);
-
-                                    if (parsedDateNow.equals(parsedDepositDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
-                                for(Transaction i : paymentTransactionList) {
-                                    String parsedPaymentDate = i.getTransactionDate().format(monthFormat);
-                                    if (parsedDateNow.equals(parsedPaymentDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
+                                monthComparison(depositTransactionList, paymentTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow);
                             }
                             case ("3") -> {
                                 LocalDate dateNow = LocalDate.now();
                                 String parsedDateNow = dateNow.format(yearFormat);
-                                for(Transaction i : depositTransactionList) {
-                                    String parsedDepositDate = i.getTransactionDate().format(yearFormat);
-
-                                    if (parsedDateNow.equals(parsedDepositDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
-                                for(Transaction i : paymentTransactionList) {
-                                    String parsedPaymentDate = i.getTransactionDate().format(yearFormat);
-                                    if (parsedDateNow.equals(parsedPaymentDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
-
+                                yearComparison(depositTransactionList, paymentTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow);
                             }
                             case ("4") -> {
                                 LocalDate dateNow = LocalDate.now().minusYears(1);
                                 String parsedDateNow = dateNow.format(yearFormat);
-                                for(Transaction i : depositTransactionList) {
-                                    String parsedDepositDate = i.getTransactionDate().format(yearFormat);
-
-                                    if (parsedDateNow.equals(parsedDepositDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
-                                for(Transaction i : paymentTransactionList) {
-                                    String parsedPaymentDate = i.getTransactionDate().format(yearFormat);
-                                    if (parsedDateNow.equals(parsedPaymentDate)) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
-
+                                yearComparison(depositTransactionList, paymentTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow);
                             }
                             case ("5") -> {
                                 System.out.println("Select the vendor you want to display: ");
@@ -191,18 +141,47 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
     public static void  paymentReader(ArrayList<Transaction> paymentTransactionList) {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        for(Transaction i : paymentTransactionList) {
-            System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+        for(int i = paymentTransactionList.size() - 1; i > -1; i--) {
+            System.out.printf("%s|%s|%s|%s|$%.2f\n",paymentTransactionList.get(i).getTransactionDate().format(dateFormat),paymentTransactionList.get(i).getTransactionTime().format(timeFormat),paymentTransactionList.get(i).getTransactionDescription(),paymentTransactionList.get(i).getVendor(),paymentTransactionList.get(i).getPrice());
         }
     }
     public static void depositReader(ArrayList<Transaction> depositTransactionList) {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        for(Transaction i : depositTransactionList) {
-            System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+        for(int i = depositTransactionList.size() - 1; i > -1; i--) {
+            System.out.printf("%s|%s|%s|%s|$%.2f\n",depositTransactionList.get(i).getTransactionDate().format(dateFormat),depositTransactionList.get(i).getTransactionTime().format(timeFormat),depositTransactionList.get(i).getTransactionDescription(),depositTransactionList.get(i).getVendor(),depositTransactionList.get(i).getPrice());
         }
     }
+    public static void monthComparison(ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList, DateTimeFormatter monthFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow) {
+        for(Transaction i : depositTransactionList) {
+            String parsedDepositDate = i.getTransactionDate().format(monthFormat);
 
+            if (parsedDateNow.equals(parsedDepositDate)) {
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+            }
+        }
+        for(Transaction i : paymentTransactionList) {
+            String parsedPaymentDate = i.getTransactionDate().format(monthFormat);
+            if (parsedDateNow.equals(parsedPaymentDate)) {
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+            }
+        }
+    }
+    public static void yearComparison(ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList, DateTimeFormatter yearFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow) {
+        for(Transaction i : depositTransactionList) {
+            String parsedDepositDate = i.getTransactionDate().format(yearFormat);
+
+            if (parsedDateNow.equals(parsedDepositDate)) {
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+            }
+        }
+        for(Transaction i : paymentTransactionList) {
+            String parsedPaymentDate = i.getTransactionDate().format(yearFormat);
+            if (parsedDateNow.equals(parsedPaymentDate)) {
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+            }
+        }
+    }
 
 
 }
