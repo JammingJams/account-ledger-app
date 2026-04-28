@@ -1,14 +1,7 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-//
 
 
 public class LedgerAccountApp {
@@ -18,16 +11,9 @@ public class LedgerAccountApp {
         boolean userInLedger;
         String homeScreenOption;
         String userSelection;
-        double priceSelection = 0;
         boolean initialLedger;
-        boolean reportLoop;
         ArrayList<Transaction> depositTransactionList = new ArrayList<>();
         ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
-
-        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
-        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("yyyy-MM");
-        DateTimeFormatter yearFormat = DateTimeFormatter.ofPattern("yyyy");
 
 
 
