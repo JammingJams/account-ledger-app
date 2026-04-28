@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class Ledger {
@@ -77,6 +78,12 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                                     }
                                 }
                             }
+                            case ("6") -> {
+                                System.out.println("Search Date/End Date/Description/Vendor/Amount");
+                                System.out.println("Search for your payment/deposit history with these parameters!: ");
+                                userSelection = sc.nextLine().trim().toLowerCase();
+
+                            }
                             case ("0") -> reportLoop = false;
                             default -> System.out.println("Invalid user input");
 
@@ -133,6 +140,11 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            //We would compare dates and allow user to input dates as well
+            depositTransactionList.sort(Comparator.comparing(Transaction::getTransactionDate).thenComparing(Transaction::getTransactionTime));
+            paymentTransactionList.sort(Comparator.comparing(Transaction::getTransactionDate).thenComparing(Transaction::getTransactionTime));
+
+
             initialLedger = false;
         }
         return initialLedger;

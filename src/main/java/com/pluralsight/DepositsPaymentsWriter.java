@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DepositsPaymentsWriter {
     public static void writePayment(Scanner sc) {
+        boolean userInLoop = true;
+        String userSelection = "";
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -36,9 +39,10 @@ public class DepositsPaymentsWriter {
                     sc.nextLine();
                 }
             }
-
             LocalTime userCurrentTime = LocalTime.now().withSecond(2).withNano(0);
             LocalDate userCurrentDate = LocalDate.now();
+
+            dateTimePref(sc, userInLoop, userSelection, userCurrentDate, userCurrentTime);
 
             String parsedTime = userCurrentTime.format(timeFormat);
             String parsedDate = userCurrentDate.format(dateFormat);
@@ -58,6 +62,8 @@ public class DepositsPaymentsWriter {
     }
 
     public static void writeDeposit(Scanner sc) {
+        boolean userInLoop = true;
+        String userSelection = "";
         try {
             DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -87,6 +93,8 @@ public class DepositsPaymentsWriter {
             LocalTime userCurrentTime = LocalTime.now().withNano(0);
             LocalDate userCurrentDate = LocalDate.now();
 
+            dateTimePref(sc, userInLoop, userSelection, userCurrentDate, userCurrentTime);
+
             String parsedTime = userCurrentTime.format(timeFormat);
             String parsedDate = userCurrentDate.format(dateFormat);
             String dateAndTime = parsedDate + "|" + parsedTime;
@@ -105,4 +113,49 @@ public class DepositsPaymentsWriter {
 
     }
 
+
+    public static void dateTimePref(Scanner sc, boolean userInLoop, String userSelection, LocalDate userCurrentDate, LocalTime userCurrentTime) {
+        System.out.print("Type (A) to automatically assign date and time to current date\nType (M) for manually assigning date and time\nType here: ");
+        while (userInLoop) {
+            userSelection = sc.nextLine().trim().toLowerCase();
+            switch (userSelection) {
+                case ("m") -> {
+                    System.out.print("Type in the date  with this (yyyy-MM-dd) you want to assign: ");
+                    while (true) {
+                        userSelection = sc.nextLine().trim();
+                        try {
+                            userCurrentDate = LocalDate.parse(userSelection);
+                            break;
+                        }
+                        catch (DateTimeParseException e) {
+                            //e.printStackTrace();
+                            System.out.println("Incorrect Format, your format must be (yyyy-MM-dd)");
+                            System.out.print("Type in the date with this (yyyy-MM-dd) correct format: ");
+                        }
+                    }
+                    System.out.print("Type in the time with this (HH:mm:ss) you want to assign: ");
+                    while (true) {
+                        userSelection = sc.nextLine().trim();
+                        try {
+                            userCurrentTime = LocalTime.parse(userSelection);
+                            userInLoop = false;
+                            break;
+                        }
+                        catch (DateTimeParseException e) {
+                            //e.printStackTrace();
+                            System.out.println("Incorrect Format, your format must be (HH:mm:ss)");
+                            System.out.print("Type in the time with this (HH:mm:ss) correct format: ");
+                        }
+                    }
+                }
+                case ("a") -> {
+                    userCurrentTime = LocalTime.now().withNano(0);
+                    userCurrentDate = LocalDate.now();
+                    userInLoop = false;
+                }
+                default -> System.out.print("Invalid user input,\nType (A) automatically assigns date and time to current date\nType (M) for manually assigning date and time\nType here: ");
+            }
+
+        }
+    }
 }
