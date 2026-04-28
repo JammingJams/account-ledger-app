@@ -14,11 +14,15 @@ public class LedgerAccountApp {
         String homeScreenOption = "";
         String userSelection = "";
         double priceSelection = 0;
+        boolean initialLedger = true;
+        boolean reportLoop = true;
         ArrayList<Transaction> depositTransactionList = new ArrayList<>();
         ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
 
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("yyyy-MM");
+        DateTimeFormatter yearFormat = DateTimeFormatter.ofPattern("yyyy");
         //
         /*Transaction obj = new Transaction();
         obj.setPrice(90.00);
@@ -30,8 +34,11 @@ public class LedgerAccountApp {
         while (userInHomescreen) {
             System.out.println("Welcome to the account ledger");
             System.out.println("(D) Add deposit\n(P) Make Payment (Debit)\n(L) Ledger\n(X) exit");
+            initialLedger = true;
             userInLedger = true;
             userSelection = "";
+            depositTransactionList.clear();
+            paymentTransactionList.clear();
             homeScreenOption = sc.nextLine().trim().toLowerCase();
 
             switch (homeScreenOption) {
@@ -126,17 +133,17 @@ public class LedgerAccountApp {
                 }
                 case ("l") -> {
                     while (userInLedger) {
+                        reportLoop = true;
 
-                        depositTransactionList.clear();
-                        paymentTransactionList.clear();
+                        while (initialLedger) {
 
-                        try {
-                            BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
-                            String line;
+                            try {
+                                BufferedReader bufferedReader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"));
+                                String line;
 
-                            bufferedReader.readLine();
+                                bufferedReader.readLine();
 
-                            while((line = bufferedReader.readLine()) != null) {
+                                while ((line = bufferedReader.readLine()) != null) {
 
                                     String[] tempArray = line.split("\\|");
 
@@ -157,22 +164,21 @@ public class LedgerAccountApp {
 
                                         if (amount < 0) {
                                             depositTransactionList.add(transaction);
-                                        }
-                                        else {
+                                        } else {
                                             paymentTransactionList.add(transaction);
                                         }
 
-                                    }
-                                    catch (NumberFormatException e) {
+                                    } catch (NumberFormatException e) {
                                         e.printStackTrace();
                                     }
 
 
-                            }
+                                }
 
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            initialLedger = false;
                         }
                         System.out.println("(A) Display all entries\n(D) Display all entries that are deposits\n(P) Display payment entries\n(R) Run pre-defined reports\n(H) Go back to homepage");
                         System.out.print("Type your selection here: ");
@@ -200,7 +206,48 @@ public class LedgerAccountApp {
                                     System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
                                 }
                             }
-                            case ("r") -> {}
+                            case ("r") -> {
+                                while (reportLoop) {
+                                    System.out.println("(1) Month to Date\n(2) Previous Month\n(3) Year to Date\n(4) Previous Year\n(5) Search by Vendor\n(0) Ledger Home Page");
+                                    System.out.print("Please type in the number for the task: ");
+                                    userSelection = sc.nextLine();
+
+                                    switch (userSelection) {
+                                        case ("1") -> {
+                                            LocalDate dateNow = LocalDate.now();
+                                            String parsedDateNow = dateNow.format(monthFormat);
+                                            for(Transaction i : depositTransactionList) {
+                                                String parsedDepositDate = i.getTransactionDate().format(monthFormat);
+
+                                                if (parsedDateNow.equals(parsedDepositDate)) {
+                                                   System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
+                                            for(Transaction i : paymentTransactionList) {
+                                                String parsedPaymentDate = i.getTransactionDate().format(monthFormat);
+                                                if (parsedDateNow.equals(parsedPaymentDate)) {
+                                                    System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                                                }
+                                            }
+                                        }
+                                        case ("2") -> {
+
+                                        }
+                                        case ("3") -> {
+
+                                        }
+                                        case ("4") -> {
+
+                                        }
+                                        case ("5") -> {
+
+                                        }
+                                        default -> {System.out.println("Invalid user input");}
+
+                                    }
+
+                                }
+                            }
                             case ("h") -> {userInLedger = false;}
                             default -> {System.out.println("Invalid user input");}
                         }
