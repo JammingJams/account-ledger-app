@@ -14,12 +14,12 @@ public class LedgerAccountApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         boolean userInHomescreen = true;
-        boolean userInLedger = true;
-        String homeScreenOption = "";
-        String userSelection = "";
+        boolean userInLedger;
+        String homeScreenOption;
+        String userSelection;
         double priceSelection = 0;
-        boolean initialLedger = true;
-        boolean reportLoop = true;
+        boolean initialLedger;
+        boolean reportLoop;
         ArrayList<Transaction> depositTransactionList = new ArrayList<>();
         ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
 
@@ -27,11 +27,6 @@ public class LedgerAccountApp {
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("yyyy-MM");
         DateTimeFormatter yearFormat = DateTimeFormatter.ofPattern("yyyy");
-        //
-        /*Transaction obj = new Transaction();
-        obj.setPrice(90.00);
-        transactionHashMap.put("Hello world", obj);*/
-
 
 
 
@@ -216,20 +211,20 @@ public class LedgerAccountApp {
                                                 }
                                             }
                                         }
-                                        case ("0") -> {reportLoop = false;}
-                                        default -> {System.out.println("Invalid user input");}
+                                        case ("0") -> reportLoop = false;
+                                        default -> System.out.println("Invalid user input");
 
                                     }
 
                                 }
                             }
-                            case ("h") -> {userInLedger = false;}
-                            default -> {System.out.println("Invalid user input");}
+                            case ("h") -> userInLedger = false;
+                            default -> System.out.println("Invalid user input");
                         }
                     }
                 }
-                case ("x") -> {userInHomescreen = false;}
-                default -> {System.out.println("Incorrect user input");}
+                case ("x") -> userInHomescreen = false;
+                default -> System.out.println("Incorrect user input");
 
             }
 

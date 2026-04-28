@@ -17,8 +17,8 @@ public class DepositsPaymentsWriter {
 
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv",true));
-            double tempPrice = 0;
-            double notParsedPrice = 0;
+            double tempPrice;
+            double notParsedPrice;
 
             System.out.print("Why are you receiving money?: ");
             String transactionDescription = sc.nextLine().trim();
@@ -65,8 +65,8 @@ public class DepositsPaymentsWriter {
             DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv",true));
-            double tempPrice = 0;
-            double notParsedPrice = 0;
+            double tempPrice;
+            double notParsedPrice;
 
             System.out.print("What product are you buying?: ");
             String transactionDescription = sc.nextLine().trim();
