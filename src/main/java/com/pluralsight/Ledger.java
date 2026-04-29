@@ -40,7 +40,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                 case ("p") -> paymentReader(paymentTransactionList);
                 case ("r") -> {
                     while (reportLoop) {
-                        System.out.println("(1) Month to Date\n(2) Previous Month\n(3) Year to Date\n(4) Previous Year\n(5) Search by Vendor\n(0) Ledger Home Page");
+                        System.out.println("(1) Month to Date\n(2) Previous Month\n(3) Year to Date\n(4) Previous Year\n(5) Search by Vendor\n(6) Custom Search\n(0) Ledger Home Page");
                         System.out.print("Please type in the number for the task: ");
                         userSelection = sc.nextLine();
 
@@ -80,71 +80,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                                     }
                                 }
                             }
-                            case ("6") -> {
-                                double amount = 0;
-                                LocalDate startDate = null;
-                                LocalDate endDate = null;
-                                System.out.println("Search Date/End Date/Description/Vendor/Amount");
-                                System.out.println("Search for your payment/deposit history with these parameters!: ");
-                                System.out.print("Please enter Start Date: ");
-                                while (true) {
-                                    String startDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+", "");
-                                    try {
-                                        if (!startDateT.isEmpty()) {
-                                            startDate = LocalDate.parse(startDateT);
-                                        }
-                                        break;
-                                    }
-                                    catch (DateTimeParseException e) {
-                                        System.out.print("Hey this is an invalid date put in a valid date: ");
-                                    }
-                                }
-                                System.out.print("Please enter End Date: ");
-                                String endDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
-                                while (true) {
-                                    try {
-                                        if (!endDateT.isEmpty()) {
-                                            endDate = LocalDate.parse(endDateT);
-                                        }
-                                        break;
-                                    } catch (DateTimeParseException e) {
-                                        System.out.print("Hey this is an invalid date put in a valid date: ");
-                                    }
-                                }
-                                System.out.print("Please enter Item Description: ");
-                                String description = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
-                                System.out.print("Please enter Item Vendor: ");
-                                String vendor = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
-                                System.out.print("Please enter Item Amount: ");
-                                while (true) {
-                                    try {
-                                        double tempPrice = 0;
-                                        tempPrice = sc.nextDouble();
-                                        amount = Math.round(tempPrice * 100.0) / 100.0;
-                                        sc.nextLine();
-                                        break;
-                                    } catch (InputMismatchException e) {
-                                        //e.printStackTrace();
-                                        System.out.print("Hey please input a valid number not a string!: ");
-                                        sc.nextLine();
-                                    }
-                                }
-                                //Is LocalStartDate within or at LocalEndDate//
-                                for (Transaction i : depositTransactionList) {
-                                    boolean matchesDateRange = (startDate == null || i.getTransactionDate().isAfter(startDate.minusDays(1))) && (endDate == null || i.getTransactionDate().isBefore(endDate.plusDays(1)));
-                                    boolean matchesDescription = description.isEmpty() || i.getTransactionDescription().toLowerCase().trim().replaceAll("\\s+","").equals(description);
-                                    boolean matchesVendor = vendor.isEmpty() || i.getVendor().toLowerCase().trim().replaceAll("\\s+","").equals(vendor);
-                                    if (amount == 0 || i.getPrice() == amount) {
-                                        System.out.println("Hey this works!");
-                                    }
-                                    boolean matchesAmount = amount == 0 || i.getPrice() == amount;
-                                    if(matchesDateRange && matchesDescription && matchesVendor && matchesAmount) {
-                                        System.out.printf("%s|%s|%s|%s|%.2f\n", i.getTransactionDate().toString(), i.getTransactionTime().toString(), i.getTransactionDescription(), i.getVendor(), i.getPrice());
-                                    }
-
-                                }
-
-                            }
+                            case ("6") -> {CustomSearch.search(depositTransactionList, paymentTransactionList);}
                             case ("0") -> reportLoop = false;
                             default -> System.out.println("Invalid user input");
 
@@ -221,6 +157,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
     public static void depositReader(ArrayList<Transaction> depositTransactionList) {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         for(int i = depositTransactionList.size() - 1; i > -1; i--) {
             System.out.printf("%s|%s|%s|%s|$%.2f\n",depositTransactionList.get(i).getTransactionDate().format(dateFormat),depositTransactionList.get(i).getTransactionTime().format(timeFormat),depositTransactionList.get(i).getTransactionDescription(),depositTransactionList.get(i).getVendor(),depositTransactionList.get(i).getPrice());
         }
