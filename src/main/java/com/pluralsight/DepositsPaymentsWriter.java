@@ -82,7 +82,6 @@ public class DepositsPaymentsWriter {
                     sc.nextLine();
                     break;
                 } catch (InputMismatchException e) {
-                    //e.printStackTrace();
                     System.out.print("Hey please input a valid number not a string!: ");
                     sc.nextLine();
                 }
@@ -152,12 +151,9 @@ public class DepositsPaymentsWriter {
                                 ch = ':';
                                 StringBuilder sb = new StringBuilder(userSelection);
                                 sb.insert(2, ch);
-                                System.out.println(sb.toString());
                                 sb.insert(5,ch);
-                                System.out.println(sb.toString());
                                 userCurrentTime = LocalTime.parse(sb.toString());
                                 break;
-
                             }
                             else if (userSelection.contains(":")) {
                                 userCurrentTime = LocalTime.parse(userSelection);
