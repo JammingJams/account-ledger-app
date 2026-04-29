@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Scanner;
 
@@ -30,13 +31,13 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
             switch (userSelection) {
                 case ("a") -> {
                     System.out.println("Deposits!");
-                    paymentReader(depositTransactionList);
+                    displayDepositsPayments(depositTransactionList);
                     System.out.println("Payments!");
-                    paymentReader(paymentTransactionList);
+                    displayDepositsPayments(paymentTransactionList);
                     System.out.println("\n\n\n");
                 }
-                case ("d") -> paymentReader(depositTransactionList);
-                case ("p") -> paymentReader(paymentTransactionList);
+                case ("d") -> displayDepositsPayments(depositTransactionList);
+                case ("p") -> displayDepositsPayments(paymentTransactionList);
                 case ("r") -> {
                     while (reportLoop) {
                         System.out.println("(1) Month to Date\n(2) Previous Month\n(3) Year to Date\n(4) Previous Year\n(5) Search by Vendor\n(6) Custom Search\n(0) Ledger Home Page");
@@ -69,21 +70,12 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                                 yearComparison(paymentTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow);
                             }
                             case ("5") -> {
-                                System.out.println("Select the vendor you want to display: ");
+                                System.out.print("Select the vendor you want to display: ");
                                 userSelection = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
-                                for(Transaction i : depositTransactionList) {
-
-                                    if (userSelection.equals(i.getVendor().trim().toLowerCase().replaceAll("\\s+",""))) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
-                                for(Transaction i : paymentTransactionList) {
-                                    if (userSelection.equals(i.getVendor().trim().toLowerCase().replaceAll("\\s+",""))) {
-                                        System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
-                                    }
-                                }
+                                displayVendor(depositTransactionList, userSelection, dateFormat, timeFormat);
+                                displayVendor(paymentTransactionList, userSelection, dateFormat, timeFormat);
                             }
-                            case ("6") -> {CustomSearch.search(depositTransactionList, paymentTransactionList);}
+                            case ("6") -> CustomSearch.search(depositTransactionList, paymentTransactionList);
                             case ("0") -> reportLoop = false;
                             default -> System.out.println("Invalid user input");
 
@@ -150,14 +142,16 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
         return initialLedger;
     }
 
-    public static void  paymentReader(ArrayList<Transaction> paymentTransactionList) {
+    public static void  displayDepositsPayments(ArrayList<Transaction> depositTransactionList) {
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        for(int i = paymentTransactionList.size() - 1; i > -1; i--) {
-            System.out.printf("%s|%s|%s|%s|$%.2f\n",paymentTransactionList.get(i).getTransactionDate().format(dateFormat),paymentTransactionList.get(i).getTransactionTime().format(timeFormat),paymentTransactionList.get(i).getTransactionDescription(),paymentTransactionList.get(i).getVendor(),paymentTransactionList.get(i).getPrice());
+        Collections.reverse(depositTransactionList);
+        for(Transaction i : depositTransactionList) {
+            System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
         }
     }
     public static void monthComparison(ArrayList<Transaction> depositTransactionList, DateTimeFormatter monthFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow) {
+        Collections.reverse(depositTransactionList);
         for(Transaction i : depositTransactionList) {
             String parsedDepositDate = i.getTransactionDate().format(monthFormat);
 
@@ -167,6 +161,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
         }
     }
     public static void yearComparison(ArrayList<Transaction> depositTransactionList, DateTimeFormatter yearFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow) {
+        Collections.reverse(depositTransactionList);
         for(Transaction i : depositTransactionList) {
             String parsedDepositDate = i.getTransactionDate().format(yearFormat);
 
@@ -175,6 +170,13 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
             }
         }
     }
+    public static void displayVendor(ArrayList<Transaction> depositTransactionList, String userSelection, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat) {
+        for(Transaction i : depositTransactionList) {
 
+            if (userSelection.equals(i.getVendor().trim().toLowerCase().replaceAll("\\s+",""))) {
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+            }
+        }
+    }
 
 }

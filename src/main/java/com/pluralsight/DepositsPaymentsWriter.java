@@ -82,6 +82,7 @@ public class DepositsPaymentsWriter {
                     sc.nextLine();
                     break;
                 } catch (InputMismatchException e) {
+                    //e.printStackTrace();
                     System.out.print("Hey please input a valid number not a string!: ");
                     sc.nextLine();
                 }
