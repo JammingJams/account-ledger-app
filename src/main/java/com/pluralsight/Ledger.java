@@ -129,7 +129,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                                         sc.nextLine();
                                     }
                                 }
-                                //Is LocalStartDate within or at LocalEndDate
+                                //Is LocalStartDate within or at LocalEndDate//
                                 for (Transaction i : depositTransactionList) {
                                     boolean matchesDateRange = (startDate == null || i.getTransactionDate().isAfter(startDate.minusDays(1))) && (startDate == null || i.getTransactionDate().isBefore(endDate.plusDays(1)));
                                     boolean matchesDescription = description.isEmpty() || i.getTransactionDescription().toLowerCase().trim().replaceAll("\\s+","").equals(description);
