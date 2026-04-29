@@ -87,7 +87,6 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                 default -> System.out.println("Invalid user input");
             }
         }
-
     }
     public static boolean initializer(boolean initialLedger, ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList ) {
         while (initialLedger) {
