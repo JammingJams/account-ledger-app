@@ -101,14 +101,15 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                                 }
                                 System.out.print("Please enter End Date: ");
                                 String endDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
-                                try {
-                                    if (!endDateT.isEmpty()) {
-                                        endDate = LocalDate.parse(endDateT);
+                                while (true) {
+                                    try {
+                                        if (!endDateT.isEmpty()) {
+                                            endDate = LocalDate.parse(endDateT);
+                                        }
+                                        break;
+                                    } catch (DateTimeParseException e) {
+                                        System.out.print("Hey this is an invalid date put in a valid date: ");
                                     }
-                                    break;
-                                }
-                                catch (DateTimeParseException e) {
-                                    System.out.print("Hey this is an invalid date put in a valid date: ");
                                 }
                                 System.out.print("Please enter Item Description: ");
                                 String description = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
@@ -127,18 +128,17 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                                         System.out.print("Hey please input a valid number not a string!: ");
                                         sc.nextLine();
                                     }
-                                };
-
+                                }
+                                //Is LocalStartDate within or at LocalEndDate
                                 for (Transaction i : depositTransactionList) {
-                                    boolean matchesStartDate = startDate == null || i.getTransactionDate().isEqual(startDate);
-                                    boolean matchesEndDate = endDate == null || i.getTransactionDate().isEqual(endDate);
+                                    boolean matchesDateRange = (startDate == null || i.getTransactionDate().isAfter(startDate.minusDays(1))) && (startDate == null || i.getTransactionDate().isBefore(endDate.plusDays(1)));
                                     boolean matchesDescription = description.isEmpty() || i.getTransactionDescription().toLowerCase().trim().replaceAll("\\s+","").equals(description);
                                     boolean matchesVendor = vendor.isEmpty() || i.getVendor().toLowerCase().trim().replaceAll("\\s+","").equals(vendor);
                                     if (amount == 0 || i.getPrice() == amount) {
                                         System.out.println("Hey this works!");
                                     }
                                     boolean matchesAmount = amount == 0 || i.getPrice() == amount;
-                                    if(matchesStartDate && matchesEndDate && matchesDescription && matchesVendor && matchesAmount) {
+                                    if(matchesDateRange && matchesDescription && matchesVendor && matchesAmount) {
                                         System.out.printf("%s|%s|%s|%s|%.2f\n", i.getTransactionDate().toString(), i.getTransactionTime().toString(), i.getTransactionDescription(), i.getVendor(), i.getPrice());
                                     }
 
