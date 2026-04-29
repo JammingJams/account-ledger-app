@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -23,9 +22,9 @@ public class DepositsPaymentsWriter {
             double tempPrice;
             double notParsedPrice;
 
-            System.out.print("Why are you receiving money?: ");
+            System.out.print("What type of payment are you making?: ");
             String transactionDescription = sc.nextLine().trim();
-            System.out.print("Who is giving you the money?: ");
+            System.out.print("What vendor is receiving the payment?: ");
             String vendor = sc.nextLine().trim();
             System.out.print("What is the amount of money your receiving?: " );
             while (true) {
@@ -113,6 +112,7 @@ public class DepositsPaymentsWriter {
 
     public static String dateTimePref(Scanner sc, boolean userInLoop, String userSelection, LocalDate userCurrentDate, LocalTime userCurrentTime, String dateAndTime) {
         System.out.print("Type (A) to automatically assign date and time to current date\nType (M) for manually assigning date and time\nType here: ");
+        char ch = ' ';
         while (true) {
             userSelection = sc.nextLine().trim().toLowerCase();
             switch (userSelection) {
@@ -121,8 +121,22 @@ public class DepositsPaymentsWriter {
                     while (true) {
                         userSelection = sc.nextLine().trim();
                         try {
-                            userCurrentDate = LocalDate.parse(userSelection);
-                            break;
+                            if(userSelection.length() == 8) {
+                                ch = '-';
+                                StringBuilder sb = new StringBuilder(userSelection);
+                                sb.insert(4, ch);
+                                sb.insert(7,ch);
+                                userCurrentDate = LocalDate.parse(sb.toString());
+                                break;
+
+                            }
+                            else if (userSelection.contains("-")) {
+                                userCurrentDate = LocalDate.parse(userSelection);
+                                break;
+                            }
+                            else {
+                                System.out.println("Invalid length your date need to contain 8 exactly numbers: ");
+                            }
                         }
                         catch (DateTimeParseException e) {
                             //e.printStackTrace();
@@ -134,9 +148,24 @@ public class DepositsPaymentsWriter {
                     while (true) {
                         userSelection = sc.nextLine().trim();
                         try {
-                            userCurrentTime = LocalTime.parse(userSelection);
-                            userInLoop = false;
-                            break;
+                            if(userSelection.length() == 6) {
+                                ch = ':';
+                                StringBuilder sb = new StringBuilder(userSelection);
+                                sb.insert(2, ch);
+                                System.out.println(sb.toString());
+                                sb.insert(5,ch);
+                                System.out.println(sb.toString());
+                                userCurrentTime = LocalTime.parse(sb.toString());
+                                break;
+
+                            }
+                            else if (userSelection.contains(":")) {
+                                userCurrentTime = LocalTime.parse(userSelection);
+                                break;
+                            }
+                            else {
+                                System.out.println("Invalid length your date need to contain 6 exactly numbers: ");
+                            }
                         }
                         catch (DateTimeParseException e) {
                             //e.printStackTrace();
