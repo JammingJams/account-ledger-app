@@ -66,7 +66,10 @@ public class CustomSearch {
             char ch = ' ';
             startDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
             try {
-                if(startDateT.length() == 8) {
+                if (startDateT.isEmpty()) {
+                    break;
+                }
+                else if(startDateT.length() == 8) {
                     ch = '-';
                     StringBuilder sb = new StringBuilder(startDateT);
                     sb.insert(4, ch);
