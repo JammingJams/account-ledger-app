@@ -131,7 +131,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                                 }
                                 //Is LocalStartDate within or at LocalEndDate//
                                 for (Transaction i : depositTransactionList) {
-                                    boolean matchesDateRange = (startDate == null || i.getTransactionDate().isAfter(startDate.minusDays(1))) && (startDate == null || i.getTransactionDate().isBefore(endDate.plusDays(1)));
+                                    boolean matchesDateRange = (startDate == null || i.getTransactionDate().isAfter(startDate.minusDays(1))) && (endDate == null || i.getTransactionDate().isBefore(endDate.plusDays(1)));
                                     boolean matchesDescription = description.isEmpty() || i.getTransactionDescription().toLowerCase().trim().replaceAll("\\s+","").equals(description);
                                     boolean matchesVendor = vendor.isEmpty() || i.getVendor().toLowerCase().trim().replaceAll("\\s+","").equals(vendor);
                                     if (amount == 0 || i.getPrice() == amount) {
