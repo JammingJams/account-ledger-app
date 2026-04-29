@@ -58,9 +58,7 @@ public class CustomSearch {
             if(matchesDateRange && matchesDescription && matchesVendor && matchesAmount) {
                 System.out.printf("%s|%s|%s|%s|%.2f\n", i.getTransactionDate().toString(), i.getTransactionTime().toString(), i.getTransactionDescription(), i.getVendor(), i.getPrice());
             }
-
         }
-
     }
     public static LocalDate askForDate(String startDateT, LocalDate startDate) {
         Scanner sc  = new Scanner(System.in);
