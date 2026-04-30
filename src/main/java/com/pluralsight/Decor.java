@@ -30,4 +30,12 @@ public class Decor {
             Thread.currentThread().interrupt();
         }
     }
+    public static void bar() {
+        System.out.println("[{__________------------------__________________________------------------__________}]");
+    }
+    public static void checkMatch(boolean matchFound, String paymentType) {
+        if (!matchFound) {
+            System.out.printf(Decor.red + "There's no %ss found!\n" + Decor.reset, paymentType);
+        }
+    }
 }

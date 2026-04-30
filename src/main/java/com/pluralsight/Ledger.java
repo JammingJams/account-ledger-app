@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class Ledger {
 
-public static void  openLedger(boolean userInLedger, boolean initialLedger, Scanner sc, String userSelection, ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList) {
+public static void  openLedger(boolean userInLedger, boolean initialLedger, Scanner sc, String userSelection, ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList, String depositType, String paymentType) {
     DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
     DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter monthFormat = DateTimeFormatter.ofPattern("yyyy-MM");
@@ -30,14 +30,14 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
 
             switch (userSelection) {
                 case ("a") -> {
-                    System.out.println("Deposits!");
+                    Decor.bar(); System.out.println("Deposits!"); Decor.bar();
                     displayDepositsPayments(depositTransactionList);
-                    System.out.println("Payments!");
-                    displayDepositsPayments(paymentTransactionList);
-                    System.out.println("\n\n\n");
+                    Decor.bar(); System.out.println("Payments!"); Decor.bar();
+                    displayDepositsPayments(paymentTransactionList); Decor.bar();
+                    Decor.waitAndContinue();
                 }
-                case ("d") -> displayDepositsPayments(depositTransactionList);
-                case ("p") -> displayDepositsPayments(paymentTransactionList);
+                case ("d") -> {Decor.bar(); displayDepositsPayments(depositTransactionList); Decor.bar(); Decor.waitAndContinue();}
+                case ("p") -> {Decor.bar(); displayDepositsPayments(paymentTransactionList); Decor.bar(); Decor.waitAndContinue();}
                 case ("r") -> {
                     while (reportLoop) {
                         System.out.println("(1) Month to Date\n(2) Previous Month\n(3) Year to Date\n(4) Previous Year\n(5) Search by Vendor\n(6) Custom Search\n(0) Ledger Home Page");
@@ -48,43 +48,54 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                             case ("1") -> {
                                 LocalDate dateNow = LocalDate.now();
                                 String parsedDateNow = dateNow.format(monthFormat);
-                                monthComparison(depositTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow);
-                                monthComparison(paymentTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow);
+                                Decor.bar(); System.out.println("Deposits!"); monthComparison(depositTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow, depositType); Decor.bar();
+                                Decor.bar(); System.out.println("Payments!"); monthComparison(paymentTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow, paymentType); Decor.bar();
+                                Decor.waitAndContinue();
                             }
                             case ("2") -> {
                                 LocalDate dateNow = LocalDate.now().minusMonths(1);
                                 String parsedDateNow = dateNow.format(monthFormat);
-                                monthComparison(depositTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow);
-                                monthComparison(paymentTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow);
+                                Decor.bar(); System.out.println("Deposits!"); monthComparison(depositTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow, depositType); Decor.bar();
+                                Decor.bar(); System.out.println("Payments!"); monthComparison(paymentTransactionList, monthFormat, dateFormat, timeFormat, parsedDateNow, paymentType); Decor.bar();
+                                Decor.waitAndContinue();
                             }
                             case ("3") -> {
                                 LocalDate dateNow = LocalDate.now();
                                 String parsedDateNow = dateNow.format(yearFormat);
-                                yearComparison(depositTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow);
-                                yearComparison(paymentTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow);
+                                Decor.bar(); System.out.println("Deposits!"); yearComparison(depositTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow, depositType); Decor.bar();
+                                Decor.bar(); System.out.println("Payments!"); yearComparison(paymentTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow, paymentType); Decor.bar();
+                                Decor.waitAndContinue();
                             }
                             case ("4") -> {
                                 LocalDate dateNow = LocalDate.now().minusYears(1);
                                 String parsedDateNow = dateNow.format(yearFormat);
-                                yearComparison(depositTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow);
-                                yearComparison(paymentTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow);
+                                Decor.bar(); System.out.println("Deposits!"); yearComparison(depositTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow, depositType); Decor.bar();
+                                Decor.bar(); System.out.println("Payments!"); yearComparison(paymentTransactionList, yearFormat, dateFormat, timeFormat, parsedDateNow, paymentType); Decor.bar();
+                                Decor.waitAndContinue();
                             }
                             case ("5") -> {
                                 System.out.print("Select the vendor you want to display: ");
                                 userSelection = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
-                                displayVendor(depositTransactionList, userSelection, dateFormat, timeFormat);
-                                displayVendor(paymentTransactionList, userSelection, dateFormat, timeFormat);
+                                Decor.bar(); System.out.println("Deposits!"); displayVendor(depositTransactionList, userSelection, dateFormat, timeFormat, depositType); Decor.bar();
+                                Decor.bar(); System.out.println("Payments!"); displayVendor(paymentTransactionList, userSelection, dateFormat, timeFormat, paymentType); Decor.bar();
+                                Decor.waitAndContinue();
                             }
-                            case ("6") -> CustomSearch.search(depositTransactionList, paymentTransactionList);
+                            case ("6") -> CustomSearch.search(depositTransactionList, paymentTransactionList, depositType, paymentType);
                             case ("0") -> reportLoop = false;
-                            default -> System.out.println("Invalid user input");
+                            default -> {
+                                System.out.println(Decor.red +"Invalid user input!" + Decor.reset);
+                                Decor.waitAndContinue();
+                            }
 
                         }
 
                     }
                 }
                 case ("h") -> userInLedger = false;
-                default -> System.out.println("Invalid user input");
+                default -> {
+                    System.out.println(Decor.red +"Invalid user input!" + Decor.reset);
+                    Decor.waitAndContinue();
+                }
             }
         }
 
@@ -150,33 +161,39 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
             System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
         }
     }
-    public static void monthComparison(ArrayList<Transaction> depositTransactionList, DateTimeFormatter monthFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow) {
+    public static void monthComparison(ArrayList<Transaction> depositTransactionList, DateTimeFormatter monthFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow, String paymentType) {
         Collections.reverse(depositTransactionList);
+        boolean matchFound = false;
         for(Transaction i : depositTransactionList) {
             String parsedDepositDate = i.getTransactionDate().format(monthFormat);
 
             if (parsedDateNow.equals(parsedDepositDate)) {
-                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice()); matchFound = true;
             }
         }
+        Decor.checkMatch(matchFound, paymentType);
     }
-    public static void yearComparison(ArrayList<Transaction> depositTransactionList, DateTimeFormatter yearFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow) {
+    public static void yearComparison(ArrayList<Transaction> depositTransactionList, DateTimeFormatter yearFormat, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String parsedDateNow, String paymentType) {
         Collections.reverse(depositTransactionList);
+        boolean matchFound = false;
         for(Transaction i : depositTransactionList) {
             String parsedDepositDate = i.getTransactionDate().format(yearFormat);
 
             if (parsedDateNow.equals(parsedDepositDate)) {
-                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice()); matchFound = true;
             }
         }
+        Decor.checkMatch(matchFound, paymentType);
     }
-    public static void displayVendor(ArrayList<Transaction> depositTransactionList, String userSelection, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat) {
+    public static void displayVendor(ArrayList<Transaction> depositTransactionList, String userSelection, DateTimeFormatter dateFormat, DateTimeFormatter timeFormat, String paymentType) {
+    boolean matchFound = false;
         for(Transaction i : depositTransactionList) {
 
             if (userSelection.equals(i.getVendor().trim().toLowerCase().replaceAll("\\s+",""))) {
-                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice());
+                System.out.printf("%s|%s|%s|%s|$%.2f\n",i.getTransactionDate().format(dateFormat),i.getTransactionTime().format(timeFormat),i.getTransactionDescription(),i.getVendor(),i.getPrice()); matchFound = true;
             }
         }
+        Decor.checkMatch(matchFound, paymentType);
     }
 
 }

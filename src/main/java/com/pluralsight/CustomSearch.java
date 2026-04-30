@@ -8,7 +8,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CustomSearch {
-    public static void search(ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList) {
+    public static void search(ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList, String depositType, String paymentType) {
         Scanner sc = new Scanner(System.in);
         double amount;
         String startDateT = "start";
@@ -48,22 +48,25 @@ public class CustomSearch {
                 Decor.waitAndContinue();
             }
         }
-        System.out.println("Deposits");
-        checkInventory(depositTransactionList, startDate, endDate, description, vendor, amount);
-        System.out.println("Payments");
-        checkInventory(paymentTransactionList, startDate, endDate, description, vendor, amount);
+        Decor.bar(); System.out.println("Deposits"); Decor.bar();
+        checkInventory(depositTransactionList, startDate, endDate, description, vendor, amount, depositType);
+        Decor.bar(); System.out.println("Payments"); Decor.bar();
+        checkInventory(paymentTransactionList, startDate, endDate, description, vendor, amount, paymentType);
+        Decor.bar(); Decor.waitAndContinue();
     }
     public static void checkInventory(ArrayList<Transaction> depositTransactionList,
-                                 LocalDate startDate, LocalDate endDate, String description, String vendor, double amount) {
+                                 LocalDate startDate, LocalDate endDate, String description, String vendor, double amount, String paymentType) {
+        boolean matchFound = false;
         for (Transaction i : depositTransactionList) {
             boolean matchesDateRange = (startDate == null || i.getTransactionDate().isAfter(startDate.minusDays(1))) && (endDate == null || i.getTransactionDate().isBefore(endDate.plusDays(1)));
             boolean matchesDescription = description.isEmpty() || i.getTransactionDescription().toLowerCase().trim().replaceAll("\\s+","").contains(description);
             boolean matchesVendor = vendor.isEmpty() || i.getVendor().toLowerCase().trim().replaceAll("\\s+","").contains(vendor);
             boolean matchesAmount = amount == 0 || i.getPrice() == amount;
             if(matchesDateRange && matchesDescription && matchesVendor && matchesAmount) {
-                System.out.printf("%s|%s|%s|%s|%.2f\n", i.getTransactionDate().toString(), i.getTransactionTime().toString(), i.getTransactionDescription(), i.getVendor(), i.getPrice());
+                System.out.printf("%s|%s|%s|%s|%.2f\n", i.getTransactionDate().toString(), i.getTransactionTime().toString(), i.getTransactionDescription(), i.getVendor(), i.getPrice()); matchFound = true;
             }
         }
+        Decor.checkMatch(matchFound, paymentType);
     }
     public static LocalDate askForDate(String dateCondition, LocalDate startDate) {
         Scanner sc  = new Scanner(System.in);

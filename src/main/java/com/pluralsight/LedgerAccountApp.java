@@ -23,7 +23,7 @@ public class LedgerAccountApp {
 
         while (userInHomescreen) {
             System.out.println("Welcome to the Gaming Emporium!");
-            Decor.pause();
+            //Decor.pause();
             System.out.println("Welcome admin press the correspond character to access parts of this program!");
             System.out.println("|(D) ->      Add Deposit      |\n|(P) ->  Make Payment (Debit) |\n|(L) ->        Ledger         |\n|(X) ->         Exit          |");
             initialLedger = true;
@@ -38,7 +38,7 @@ public class LedgerAccountApp {
 
                 case ("d") -> DepositsPaymentsWriter.write(sc,deposit,depositType);
                 case ("p") -> DepositsPaymentsWriter.write(sc,payment,paymentType);
-                case ("l") -> Ledger.openLedger(userInLedger, initialLedger, sc, userSelection, depositTransactionList, paymentTransactionList);
+                case ("l") -> Ledger.openLedger(userInLedger, initialLedger, sc, userSelection, depositTransactionList, paymentTransactionList, depositType, paymentType);
                 case ("x") -> userInHomescreen = false;
                 default -> System.out.println("Incorrect user input");
             }
