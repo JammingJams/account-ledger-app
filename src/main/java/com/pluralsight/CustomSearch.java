@@ -72,7 +72,7 @@ public class CustomSearch {
         Scanner sc  = new Scanner(System.in);
         while (true) {
             char ch;
-            System.out.printf("Please enter %s Date: ", dateCondition);
+            System.out.printf("Please enter %s Date (yyyy-MM-dd): ", dateCondition);
             String startDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
             try {
                 if (startDateT.isEmpty()) {
