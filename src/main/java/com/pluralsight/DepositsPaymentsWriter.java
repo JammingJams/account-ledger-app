@@ -11,7 +11,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DepositsPaymentsWriter {
-    public static void write(Scanner sc, String minus) {
+    public static void write(Scanner sc, String minus, String paymentType) {
         boolean userInLoop = true;
         String userSelection = "";
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
@@ -22,12 +22,12 @@ public class DepositsPaymentsWriter {
             double tempPrice;
             double notParsedPrice;
 
-            System.out.print("What type of payment are you making?: ");
+            System.out.printf("What type of %s are you making?: ",paymentType);
             String transactionDescription = sc.nextLine().trim();
-            System.out.print("What vendor is receiving the payment?: ");
+            System.out.printf("What vendor is receiving the %s?: ",paymentType);
             String vendor = sc.nextLine().trim();
-            System.out.print("What is the amount of money your receiving?: " );
             while (true) {
+                System.out.print("What is the amount of money your receiving?: " );
                 try {
                     tempPrice = sc.nextDouble();
                     notParsedPrice = Math.round(tempPrice * 100.0) / 100.0;
@@ -35,7 +35,8 @@ public class DepositsPaymentsWriter {
                     break;
                 } catch (InputMismatchException e) {
                     //e.printStackTrace();
-                    System.out.print("Hey please input a valid number not a string!: ");
+                    System.out.println(Decor.red + "Invalid input: make sure your only inputting numbers" + Decor.reset);
+                    Decor.waitAndContinue();
                     sc.nextLine();
                 }
             }
@@ -52,7 +53,8 @@ public class DepositsPaymentsWriter {
             bufferedWriter.write(depositTransaction);
             bufferedWriter.newLine();
             bufferedWriter.close();
-            System.out.println("\n\n\n");
+            System.out.printf(Decor.green + "Successfully created a %s!\n" + Decor.reset, paymentType);
+            Decor.waitAndContinue();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -61,13 +63,13 @@ public class DepositsPaymentsWriter {
 
     public static String dateTimePref(Scanner sc, boolean userInLoop, String userSelection, LocalDate userCurrentDate, LocalTime userCurrentTime, String dateAndTime) {
         System.out.print("Type (A) to automatically assign date and time to current date\nType (M) for manually assigning date and time\nType here: ");
-        char ch = ' ';
+        userSelection = sc.nextLine().trim();
+        char ch;
         while (true) {
-            userSelection = sc.nextLine().trim().toLowerCase();
             switch (userSelection) {
                 case ("m") -> {
-                    System.out.print("Type in the date  with this (yyyy-MM-dd) you want to assign: ");
                     while (true) {
+                        System.out.print("Type in the date  with this (yyyy-MM-dd) you want to assign: ");
                         userSelection = sc.nextLine().trim();
                         try {
                             if(userSelection.length() == 8) {
@@ -84,18 +86,18 @@ public class DepositsPaymentsWriter {
                                 break;
                             }
                             else {
-                                System.out.println(Decor.red + "Invalid length your date need to contain 8 exactly numbers: " + Decor.yellow);
+                                System.out.println(Decor.red + "Invalid length your date need to contain 8 exactly numbers!" + Decor.yellow);
                                 Decor.waitAndContinue();
                             }
                         }
                         catch (DateTimeParseException e) {
                             //e.printStackTrace();
-                            System.out.println("Incorrect Format, your format must be (yyyy-MM-dd)");
-                            System.out.print("Type in the date with this (yyyy-MM-dd) correct format: ");
+                            System.out.println(Decor.red + "Incorrect Format, your format must be (yyyy-MM-dd)!"+ Decor.yellow);
+                            Decor.waitAndContinue();
                         }
                     }
-                    System.out.print("Type in the time with this (HH:mm:ss) you want to assign: ");
                     while (true) {
+                        System.out.print("Type in the time with this (HH:mm:ss) you want to assign: ");
                         userSelection = sc.nextLine().trim();
                         try {
                             if(userSelection.length() == 6) {
@@ -111,13 +113,14 @@ public class DepositsPaymentsWriter {
                                 break;
                             }
                             else {
-                                System.out.println("Invalid length your date need to contain 6 exactly numbers: ");
+                                System.out.println(Decor.red + "Invalid length your date need to contain 6 exactly numbers!" + Decor.reset);
+                                Decor.waitAndContinue();
                             }
                         }
                         catch (DateTimeParseException e) {
                             //e.printStackTrace();
-                            System.out.println("Incorrect Format, your format must be (HH:mm:ss)");
-                            System.out.print("Type in the time with this (HH:mm:ss) correct format: ");
+                            System.out.println(Decor.red + "Incorrect Format, your format must be (HH:mm:ss)!" + Decor.reset);
+                            Decor.waitAndContinue();
                         }
                     }
                     return userCurrentDate.toString() + "|" + userCurrentTime.toString();
@@ -128,7 +131,13 @@ public class DepositsPaymentsWriter {
                     userInLoop = false;
                     return userCurrentDate.toString() + "|" + userCurrentTime.toString();
                 }
-                default -> System.out.print("Invalid user input,\nType (A) automatically assigns date and time to current date\nType (M) for manually assigning date and time\nType here: ");
+                default -> {
+                    System.out.println(Decor.red + "Invalid user input!" + Decor.reset);
+                    Decor.waitAndContinue();
+                    System.out.print("Type (A) to automatically assign date and time to current date\nType (M) for manually assigning date and time\nType here: ");
+                    userSelection = sc.nextLine().trim();
+                }
+
             }
 
         }
