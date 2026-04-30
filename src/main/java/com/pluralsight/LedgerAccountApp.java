@@ -15,20 +15,23 @@ public class LedgerAccountApp {
         boolean initialLedger;
         String deposit = "";
         String payment = "-";
-        String paymentType = "payment";
         String depositType = "deposit";
+        String paymentType = "payment";
         ArrayList<Transaction> depositTransactionList = new ArrayList<>();
         ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
 
 
         while (userInHomescreen) {
-            System.out.println("Welcome to the account ledger");
-            System.out.println("(D) Add deposit\n(P) Make Payment (Debit)\n(L) Ledger\n(X) exit");
+            System.out.println("Welcome to the Gaming Emporium!");
+            Decor.pause();
+            System.out.println("Welcome admin press the correspond character to access parts of this program!");
+            System.out.println("|(D) ->      Add Deposit      |\n|(P) ->  Make Payment (Debit) |\n|(L) ->        Ledger         |\n|(X) ->         Exit          |");
             initialLedger = true;
             userInLedger = true;
             userSelection = "";
             depositTransactionList.clear();
             paymentTransactionList.clear();
+            System.out.print("Enter character here: ");
             homeScreenOption = sc.nextLine().trim().toLowerCase();
 
             switch (homeScreenOption) {

@@ -22,4 +22,12 @@ public class Decor {
             Thread.currentThread().interrupt();
         }
     }
+    public static void pause() {
+        try {
+            Thread.sleep(2000);
+        }
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 }
