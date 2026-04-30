@@ -11,7 +11,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DepositsPaymentsWriter {
-    public static void writePayment(Scanner sc) {
+    public static void write(Scanner sc, String minus) {
         boolean userInLoop = true;
         String userSelection = "";
         DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
@@ -48,7 +48,7 @@ public class DepositsPaymentsWriter {
 
             String price = String.valueOf(notParsedPrice);
 
-            String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|-" + price;
+            String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|" + minus + price;
             bufferedWriter.write(depositTransaction);
             bufferedWriter.newLine();
             bufferedWriter.close();
@@ -58,57 +58,6 @@ public class DepositsPaymentsWriter {
             e.printStackTrace();
         }
     }
-
-    public static void writeDeposit(Scanner sc) {
-        boolean userInLoop = true;
-        String userSelection = "";
-        try {
-            DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern(("HH:mm:ss"));
-            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv",true));
-            double tempPrice;
-            double notParsedPrice;
-
-            System.out.print("What product are you buying?: ");
-            String transactionDescription = sc.nextLine().trim();
-            System.out.print("What is the product's vendor?: ");
-            String vendor = sc.nextLine().trim();
-            System.out.print("What is the amount of money your paying?: " );
-            while (true) {
-                try {
-                    tempPrice = sc.nextDouble();
-                    notParsedPrice = Math.round(tempPrice * 100.0) / 100.0;
-                    sc.nextLine();
-                    break;
-                } catch (InputMismatchException e) {
-                    //e.printStackTrace();
-                    System.out.print("Hey please input a valid number not a string!: ");
-                    sc.nextLine();
-                }
-            }
-
-            LocalTime userCurrentTime = LocalTime.now().withNano(0);
-            LocalDate userCurrentDate = LocalDate.now();
-
-            String dateAndTime = "";
-
-            dateAndTime = dateTimePref(sc, userInLoop, userSelection, userCurrentDate, userCurrentTime, dateAndTime);
-
-            String price = String.valueOf(notParsedPrice);
-
-            String depositTransaction = dateAndTime + "|" + transactionDescription + "|" + vendor + "|" + price;
-            bufferedWriter.write(depositTransaction);
-            bufferedWriter.newLine();
-            bufferedWriter.close();
-            System.out.println("\n\n\n");
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
     public static String dateTimePref(Scanner sc, boolean userInLoop, String userSelection, LocalDate userCurrentDate, LocalTime userCurrentTime, String dateAndTime) {
         System.out.print("Type (A) to automatically assign date and time to current date\nType (M) for manually assigning date and time\nType here: ");

@@ -13,6 +13,8 @@ public class LedgerAccountApp {
         String homeScreenOption;
         String userSelection;
         boolean initialLedger;
+        String deposit = "";
+        String payment = "-";
         ArrayList<Transaction> depositTransactionList = new ArrayList<>();
         ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
 
@@ -29,8 +31,8 @@ public class LedgerAccountApp {
 
             switch (homeScreenOption) {
 
-                case ("d") -> DepositsPaymentsWriter.writeDeposit(sc);
-                case ("p") -> DepositsPaymentsWriter.writePayment(sc);
+                case ("d") -> DepositsPaymentsWriter.write(sc,deposit);
+                case ("p") -> DepositsPaymentsWriter.write(sc,payment);
                 case ("l") -> Ledger.openLedger(userInLedger, initialLedger, sc, userSelection, depositTransactionList, paymentTransactionList);
                 case ("x") -> userInHomescreen = false;
                 default -> System.out.println("Incorrect user input");
