@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class CustomSearch {
     public static void search(ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList) {
         Scanner sc = new Scanner(System.in);
-        double amount = 0;
+        double amount;
         String startDateT = "";
         String endDateT = "";
         LocalDate startDate = null;
@@ -32,7 +32,7 @@ public class CustomSearch {
         System.out.print("Please enter Item Amount: ");
         while (true) {
             try {
-                double tempPrice = 0;
+                double tempPrice;
                 tempPrice = sc.nextDouble();
                 amount = Math.round(tempPrice * 100.0) / 100.0;
                 sc.nextLine();
@@ -52,8 +52,8 @@ public class CustomSearch {
                                  LocalDate startDate, LocalDate endDate, String description, String vendor, double amount) {
         for (Transaction i : depositTransactionList) {
             boolean matchesDateRange = (startDate == null || i.getTransactionDate().isAfter(startDate.minusDays(1))) && (endDate == null || i.getTransactionDate().isBefore(endDate.plusDays(1)));
-            boolean matchesDescription = description.isEmpty() || i.getTransactionDescription().toLowerCase().trim().replaceAll("\\s+","").equals(description);
-            boolean matchesVendor = vendor.isEmpty() || i.getVendor().toLowerCase().trim().replaceAll("\\s+","").equals(vendor);
+            boolean matchesDescription = description.isEmpty() || i.getTransactionDescription().toLowerCase().trim().replaceAll("\\s+","").contains(description);
+            boolean matchesVendor = vendor.isEmpty() || i.getVendor().toLowerCase().trim().replaceAll("\\s+","").contains(vendor);
             boolean matchesAmount = amount == 0 || i.getPrice() == amount;
             if(matchesDateRange && matchesDescription && matchesVendor && matchesAmount) {
                 System.out.printf("%s|%s|%s|%s|%.2f\n", i.getTransactionDate().toString(), i.getTransactionTime().toString(), i.getTransactionDescription(), i.getVendor(), i.getPrice());
@@ -63,7 +63,7 @@ public class CustomSearch {
     public static LocalDate askForDate(String startDateT, LocalDate startDate) {
         Scanner sc  = new Scanner(System.in);
         while (true) {
-            char ch = ' ';
+            char ch;
             startDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
             try {
                 if (startDateT.isEmpty()) {
