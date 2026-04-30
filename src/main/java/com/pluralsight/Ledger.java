@@ -95,7 +95,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
 
                     }
                 }
-                case ("h") -> {userInLedger = false; System.out.println(Decor.space);}
+                case ("h") -> userInLedger = false;
                 default -> {
                     System.out.println(Decor.red +"Invalid user input!" + Decor.reset);
                     Decor.waitAndContinue();

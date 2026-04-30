@@ -48,4 +48,9 @@ public class Decor {
         System.out.println("|                     Reports                           |");
         System.out.println("|________---------------------------------------________|");
     }
+    public static void homeDisplay() {
+        System.out.println("_________---------------------------------------_________");
+        System.out.println("|                        Home                           |");
+        System.out.println("|________---------------------------------------________|");
+    }
 }

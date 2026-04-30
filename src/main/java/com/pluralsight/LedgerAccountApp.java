@@ -19,19 +19,19 @@ public class LedgerAccountApp {
         String paymentType = "payment";
         ArrayList<Transaction> depositTransactionList = new ArrayList<>();
         ArrayList<Transaction> paymentTransactionList = new ArrayList<>();
+        System.out.println("Welcome to the Gaming Emporium!"); Decor.pause();
+        System.out.println("Welcome admin press the correspond character to access parts of this program!"); Decor.pause(); Decor.pause();
 
 
         while (userInHomescreen) {
-            System.out.println("Welcome to the Gaming Emporium!");
-            //Decor.pause();
-            System.out.println("Welcome admin press the correspond character to access parts of this program!");
+            System.out.println(Decor.space); Decor.homeDisplay();
             System.out.println("|(D) ->      Add Deposit      |\n|(P) ->  Make Payment (Debit) |\n|(L) ->        Ledger         |\n|(X) ->         Exit          |");
             initialLedger = true;
             userInLedger = true;
             userSelection = "";
             depositTransactionList.clear();
             paymentTransactionList.clear();
-            System.out.print("Enter character here: ");
+            Decor.bar(); System.out.print("Enter character here: ");
             homeScreenOption = sc.nextLine().trim().toLowerCase();
 
             switch (homeScreenOption) {
@@ -40,7 +40,7 @@ public class LedgerAccountApp {
                 case ("p") -> DepositsPaymentsWriter.write(sc,payment,paymentType);
                 case ("l") -> Ledger.openLedger(userInLedger, initialLedger, sc, userSelection, depositTransactionList, paymentTransactionList, depositType, paymentType);
                 case ("x") -> userInHomescreen = false;
-                default -> System.out.println("Incorrect user input");
+                default -> {System.out.println(Decor.red + "Incorrect user input" + Decor.reset); Decor.waitAndContinue();}
             }
         }
     }
