@@ -24,8 +24,10 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
             reportLoop = true;
             initialLedger = initializer(initialLedger, depositTransactionList, paymentTransactionList);
 
-            System.out.println("(A) Display all entries\n(D) Display all entries that are deposits\n(P) Display payment entries\n(R) Run pre-defined reports\n(H) Go back to homepage");
-            System.out.print("Type your selection here: ");
+            System.out.println(Decor.space);
+            Decor.ledgerDisplay();
+            System.out.println("|(A) ->  Display all entries                    |\n|(D) ->  Display all entries that are deposits  |\n|(P) ->  Display payment entries                |\n|(R) ->  Run pre-defined reports                |\n|(H) ->  Go back to homepage                    |");
+            Decor.bar(); System.out.print("Enter character here: ");
             userSelection = sc.nextLine().trim().toLowerCase();
 
             switch (userSelection) {
@@ -40,8 +42,10 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
                 case ("p") -> {Decor.bar(); displayDepositsPayments(paymentTransactionList); Decor.bar(); Decor.waitAndContinue();}
                 case ("r") -> {
                     while (reportLoop) {
-                        System.out.println("(1) Month to Date\n(2) Previous Month\n(3) Year to Date\n(4) Previous Year\n(5) Search by Vendor\n(6) Custom Search\n(0) Ledger Home Page");
-                        System.out.print("Please type in the number for the task: ");
+                        System.out.println(Decor.space);
+                        Decor.reportsDisplay();
+                        System.out.println("|(1) ->  Month to Date        |\n|(2) ->  Previous Month       |\n|(3) ->  Year to Date         |\n|(4) ->  Previous Year        |\n|(5) ->  Search by Vendor     |\n|(6) ->  Custom Search        |\n|(0) ->  Ledger Home Page     |");
+                        Decor.bar(); System.out.print("Enter character here: ");
                         userSelection = sc.nextLine();
 
                         switch (userSelection) {
@@ -91,7 +95,7 @@ public static void  openLedger(boolean userInLedger, boolean initialLedger, Scan
 
                     }
                 }
-                case ("h") -> userInLedger = false;
+                case ("h") -> {userInLedger = false; System.out.println(Decor.space);}
                 default -> {
                     System.out.println(Decor.red +"Invalid user input!" + Decor.reset);
                     Decor.waitAndContinue();

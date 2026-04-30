@@ -38,4 +38,14 @@ public class Decor {
             System.out.printf(Decor.red + "There's no %ss found!\n" + Decor.reset, paymentType);
         }
     }
+    public static void ledgerDisplay() {
+        System.out.println("_________---------------------------------------_________");
+        System.out.println("|                     Ledger                            |");
+        System.out.println("|________---------------------------------------________|");
+    }
+    public static void reportsDisplay() {
+        System.out.println("_________---------------------------------------_________");
+        System.out.println("|                     Reports                           |");
+        System.out.println("|________---------------------------------------________|");
+    }
 }
