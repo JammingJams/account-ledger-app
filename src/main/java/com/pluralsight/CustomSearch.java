@@ -1,5 +1,6 @@
 package com.pluralsight;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -10,17 +11,15 @@ public class CustomSearch {
     public static void search(ArrayList<Transaction> depositTransactionList, ArrayList<Transaction> paymentTransactionList) {
         Scanner sc = new Scanner(System.in);
         double amount;
-        String startDateT = "";
-        String endDateT = "";
+        String startDateT = "start";
+        String endDateT = "end";
         LocalDate startDate = null;
         LocalDate endDate = null;
         System.out.println("Search Date/End Date/Description/Vendor/Amount");
         System.out.println("Search for your payment/deposit history with these parameters!: ");
 
-        System.out.print("Please enter Start Date: ");
         startDate = askForDate(startDateT, startDate);
 
-        System.out.print("Please enter End Date: ");
         endDate = askForDate(endDateT, endDate);
 
         System.out.print("Please enter Item Description: ");
@@ -29,18 +28,24 @@ public class CustomSearch {
         System.out.print("Please enter Item Vendor: ");
         String vendor = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
 
-        System.out.print("Please enter Item Amount: ");
         while (true) {
+            System.out.print("Please enter Item Amount: ");
             try {
-                double tempPrice;
-                tempPrice = sc.nextDouble();
-                amount = Math.round(tempPrice * 100.0) / 100.0;
-                sc.nextLine();
-                break;
-            } catch (InputMismatchException e) {
+                String tempPrice;
+                tempPrice = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
+                if (tempPrice.isEmpty()) {
+                    amount = 0;
+                    break;
+                }
+                else {
+                    double parsedPrice = Double.parseDouble(tempPrice);
+                    amount = Math.round(parsedPrice * 100.0) / 100.0;
+                    break;
+                }
+            } catch (InputMismatchException|NumberFormatException e) {
                 //e.printStackTrace();
-                System.out.print("Hey please input a valid number not a string!: ");
-                sc.nextLine();
+                System.out.println(Decor.red + "Invalid input: make sure your only inputting numbers" + Decor.reset);
+                Decor.waitAndContinue();
             }
         }
         System.out.println("Deposits");
@@ -60,11 +65,12 @@ public class CustomSearch {
             }
         }
     }
-    public static LocalDate askForDate(String startDateT, LocalDate startDate) {
+    public static LocalDate askForDate(String dateCondition, LocalDate startDate) {
         Scanner sc  = new Scanner(System.in);
         while (true) {
             char ch;
-            startDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
+            System.out.printf("Please enter %s Date: ", dateCondition);
+            String startDateT = sc.nextLine().trim().toLowerCase().replaceAll("\\s+","");
             try {
                 if (startDateT.isEmpty()) {
                     break;
@@ -82,13 +88,14 @@ public class CustomSearch {
                     break;
                 }
                 else {
-                    System.out.print("Invalid length your date need to contain 8 exactly numbers: ");
+                    System.out.println(Decor.red + "Invalid length your date need to contain 8 exactly numbers" + Decor.reset);
+                    Decor.waitAndContinue();
                 }
             }
             catch (DateTimeParseException e) {
                 //e.printStackTrace();
-                System.out.println("Incorrect Format, your format must be (yyyy-MM-dd)");
-                System.out.print("Type in the date with this (yyyy-MM-dd) correct format: ");
+                System.out.println(Decor.red +"Incorrect Format, your format must be (yyyy-MM-dd)" + Decor.reset);
+                Decor.waitAndContinue();
             }
         }
         return startDate;

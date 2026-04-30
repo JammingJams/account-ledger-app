@@ -84,7 +84,8 @@ public class DepositsPaymentsWriter {
                                 break;
                             }
                             else {
-                                System.out.println("Invalid length your date need to contain 8 exactly numbers: ");
+                                System.out.println(Decor.red + "Invalid length your date need to contain 8 exactly numbers: " + Decor.yellow);
+                                Decor.waitAndContinue();
                             }
                         }
                         catch (DateTimeParseException e) {
